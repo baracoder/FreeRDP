@@ -1,10 +1,8 @@
 /**
- * FreeRDP: A Remote Desktop Protocol Implementation
- * Static Entry Point Tables
+ * WinPR: Windows Portable Runtime
+ * Clipboard Functions: POSIX file handling
  *
- * Copyright 2012 Marc-Andre Moreau <marcandre.moreau@gmail.com>
- * Copyright 2015 Thincast Technologies GmbH
- * Copyright 2015 DI (FH) Martin Haimberger <martin.haimberger@thincast.com>
+ * Copyright 2017 Alexei Lozovsky <a.lozovsky@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +17,11 @@
  * limitations under the License.
  */
 
-#include "tables.h"
+#ifndef WINPR_CLIPBOARD_POSIX_H
+#define WINPR_CLIPBOARD_POSIX_H
 
-${CLIENT_STATIC_TYPEDEFS}
-${CLIENT_STATIC_ENTRY_IMPORTS}
-${CLIENT_STATIC_ENTRY_TABLES}
-${CLIENT_STATIC_ENTRY_TABLES_LIST}
-${CLIENT_STATIC_SUBSYSTEM_IMPORTS}
-${CLIENT_STATIC_SUBSYSTEM_TABLES}
-${CLIENT_STATIC_ADDIN_TABLE}
+#include <winpr/clipboard.h>
 
+BOOL ClipboardInitPosixFileSubsystem(wClipboard* clipboard);
+
+#endif /* WINPR_CLIPBOARD_POSIX_H */

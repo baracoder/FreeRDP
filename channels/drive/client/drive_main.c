@@ -757,6 +757,7 @@ static UINT drive_free(DEVICE* device)
 	ListDictionary_Free(drive->files);
 	MessageQueue_Free(drive->IrpQueue);
 	Stream_Free(drive->device.data, TRUE);
+	free(drive->path);
 	free(drive);
 	return error;
 }
@@ -790,6 +791,7 @@ UINT drive_register_drive_path(PDEVICE_SERVICE_ENTRY_POINTS pEntryPoints,
 
 	if (name[0] && path[0])
 	{
+		size_t pathLength = strnlen(path, MAX_PATH);
 		drive = (DRIVE_DEVICE*) calloc(1, sizeof(DRIVE_DEVICE));
 
 		if (!drive)
@@ -816,7 +818,10 @@ UINT drive_register_drive_path(PDEVICE_SERVICE_ENTRY_POINTS pEntryPoints,
 		for (i = 0; i <= length; i++)
 			Stream_Write_UINT8(drive->device.data, name[i] < 0 ? '_' : name[i]);
 
-		if (ConvertToUnicode(sys_code_page, 0, path, -1, &drive->path, 0) <= 0)
+		if ((pathLength > 1) && (path[pathLength-1] == '/'))
+		        pathLength --;
+
+		if (ConvertToUnicode(sys_code_page, 0, path, pathLength, &drive->path, 0) <= 0)
 		{
 			WLog_ERR(TAG, "ConvertToUnicode failed!");
 			error = CHANNEL_RC_NO_MEMORY;
@@ -861,9 +866,7 @@ UINT drive_register_drive_path(PDEVICE_SERVICE_ENTRY_POINTS pEntryPoints,
 
 	return CHANNEL_RC_OK;
 out_error:
-	MessageQueue_Free(drive->IrpQueue);
-	ListDictionary_Free(drive->files);
-	free(drive);
+	drive_free(drive);
 	return error;
 }
 
