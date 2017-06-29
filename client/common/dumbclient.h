@@ -13,7 +13,19 @@ typedef struct dumbconfig {
 } dumbconfig;
 
 
+enum DumbMouseButtons
+{
+	LEFT,
+	RIGHT,
+	MIDDLE
+};
+
 
 DUMBCLIENT_API int dumb_start(dumbconfig* pConfig);
 DUMBCLIENT_API dumbconfig* dumb_config_new(void);
 DUMBCLIENT_API void dumb_config_free(dumbconfig* dc);
+
+DUMBCLIENT_API void dumb_key_event(int pressed, int scancode);
+DUMBCLIENT_API void dumb_mouse_buttons_event(int pressed, enum DumbMouseButtons btn, int x, int y);
+DUMBCLIENT_API void dumb_mouse_move_event(int x, int y);
+

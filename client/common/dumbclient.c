@@ -40,6 +40,8 @@ struct dc_context
 typedef struct dc_context dcContext;
 
 dumbconfig dc;
+freerdp* instance;
+
 
 static BOOL dc_context_new(freerdp* instance, rdpContext* context)
 {
@@ -117,7 +119,7 @@ static BOOL dc_pre_connect(freerdp* instance)
 
 static BOOL dc_post_connect(freerdp* instance)
 {
-	if (!gdi_init(instance, PIXEL_FORMAT_XBGR32))
+	if (!gdi_init(instance, PIXEL_FORMAT_BGRA32))
 		return FALSE;
 
 	instance->update->BeginPaint = dc_begin_paint;
@@ -194,25 +196,8 @@ static BOOL wl_context_new(freerdp* instance, rdpContext* context)
 
 static void wl_context_free(freerdp* instance, rdpContext* context)
 {
-	//if (context && context->channels)
-	//{
-	//	freerdp_channels_close(context->channels, instance);
-	//	freerdp_channels_free(context->channels);
-	//	context->channels = NULL;
-	//}
-}
 
-//BOOL wl_update_content(wlfContext *context_w)
-//{
-//	if (!context_w->waitingFrameDone && context_w->haveDamage)
-//	{
-//		UwacWindowSubmitBuffer(context_w->window, true);
-//		context_w->waitingFrameDone = TRUE;
-//		context_w->haveDamage = FALSE;
-//	}
-//
-//	return TRUE;
-//}
+}
 
 static BOOL wl_begin_paint(rdpContext* context)
 {
@@ -433,28 +418,8 @@ int dumb_start(dumbconfig* pConfig)
 	int status;
 	int argc = pConfig->argc;
 	char** argv = pConfig->argv;
-	//int argc = 6;
-	//char* argv[] = {
-	//	 "test",
-	//	 "/v:192.168.178.66:3389",
-	//	 "/u:Administrator",
-	//	 "/p:Test123",
-	//	 "/cert-ignore",
-	//	 "/log-level:TRACE"
-	//};
-	//UwacReturnCode status;
-	freerdp* instance;
 
-	//g_display = UwacOpenDisplay(NULL, &status);
-	/*if (!g_display)
-		exit(1);
 
-	g_displayHandle = CreateFileDescriptorEvent(NULL, FALSE, FALSE, UwacDisplayGetFd(g_display), WINPR_FD_READ);
-	if (!g_displayHandle)
-		exit(1);*/
-
-	//if (!handle_uwac_events(NULL, g_display))
-	//	exit(1);
 
 	instance = freerdp_new();
 	instance->PreConnect = wl_pre_connect;
@@ -488,4 +453,38 @@ int dumb_start(dumbconfig* pConfig)
 	freerdp_free(instance);
 
 	return 0;
+}
+
+
+void dumb_key_event(int pressed, int scancode) {
+	if (instance)
+		freerdp_input_send_keyboard_event_ex(instance->context->input, pressed, scancode);
+}
+
+void dumb_mouse_buttons_event(int pressed, enum DumbMouseButtons btn, int x, int y) {
+	UINT16 flags;
+	if (pressed) {
+		flags = PTR_FLAGS_DOWN;
+	}
+	else {
+		flags = 0;
+	}
+	switch (btn) {
+	case LEFT:
+		flags |= PTR_FLAGS_BUTTON1;
+		break;
+	case RIGHT:
+		flags |= PTR_FLAGS_BUTTON2;
+		break;
+	case MIDDLE:
+		flags |= PTR_FLAGS_BUTTON3;
+		break;
+	}
+	if (instance)
+		instance->context->input->MouseEvent(instance->context->input, flags, x, y);
+}
+
+void dumb_mouse_move_event(int x, int y) {
+	if (instance)
+		instance->context->input->MouseEvent(instance->context->input, PTR_FLAGS_MOVE, x, y);
 }

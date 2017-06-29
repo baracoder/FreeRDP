@@ -156,6 +156,8 @@ BOOL freerdp_connect(freerdp* instance)
 	if (!instance)
 		return FALSE;
 
+	printf("server ServerHostname: '%s'\n", instance->settings->ServerHostname);
+
 	/* We always set the return code to 0 before we start the connect sequence*/
 	connectErrorCode = 0;
 	freerdp_set_last_error(instance->context, FREERDP_ERROR_SUCCESS);
