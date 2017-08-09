@@ -830,7 +830,7 @@ static INLINE pstatus_t general_RGBToAVC444YUV_BGRX(
 	 */
 	UINT32 x, y, n, numRows, numCols;
 	BOOL evenRow = TRUE;
-	BYTE* b1, *b2, *b3, *b4, *b5, *b6, *b7;
+	BYTE* b1 = 0, *b2 = 0, *b3 = 0, *b4 = 0 , *b5 = 0, *b6 = 0, *b7 = 0;
 	const BYTE* pMaxSrc = pSrc + (roi->height - 1) * srcStep;
 	numRows = (roi->height + 1) & ~1;
 	numCols = (roi->width + 1) & ~1;
@@ -965,7 +965,7 @@ static INLINE pstatus_t general_RGBToAVC444YUV_ANY(
 	const UINT32 bpp = GetBytesPerPixel(srcFormat);
 	UINT32 x, y, n, numRows, numCols;
 	BOOL evenRow = TRUE;
-	BYTE* b1, *b2, *b3, *b4, *b5, *b6, *b7;
+	BYTE* b1 = 0, *b2 = 0 , *b3 = 0, *b4 = 0, *b5 = 0, *b6 = 0, *b7 = 0;
 	const BYTE* pMaxSrc = pSrc + (roi->height - 1) * srcStep;
 	numRows = (roi->height + 1) & ~1;
 	numCols = (roi->width + 1) & ~1;

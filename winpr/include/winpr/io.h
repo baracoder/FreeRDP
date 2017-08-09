@@ -187,7 +187,7 @@ WINPR_API VOID _IoDeleteDeviceEx(PDEVICE_OBJECT_EX DeviceObject);
 
 #endif
 
-#ifdef _UWP
+#ifdef _UWP2
 
 #ifdef __cplusplus
 extern "C" {

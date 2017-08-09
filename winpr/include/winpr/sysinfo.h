@@ -274,7 +274,7 @@ WINPR_API BOOL GetVersionExW(LPOSVERSIONINFOW lpVersionInformation);
 
 #if !defined(_WIN32) || defined(_UWP)
 
-WINPR_API DWORD GetTickCount(void);
+//WINPR_API DWORD GetTickCount(void);
 
 typedef enum _COMPUTER_NAME_FORMAT
 {

@@ -25,23 +25,23 @@
 #include <winpr/rpc.h>
 #include <winpr/crypto.h>
 
-#if !defined(_WIN32) || defined(_UWP)
+#if !defined(_WIN32) || defined(_UWP2)
 
 #include "../log.h"
 #define TAG WINPR_TAG("rpc")
 
-RPC_STATUS RpcBindingCopy(RPC_BINDING_HANDLE SourceBinding,
-                          RPC_BINDING_HANDLE* DestinationBinding)
-{
-	WLog_ERR(TAG, "Not implemented");
-	return 0;
-}
+//RPC_STATUS RpcBindingCopy(RPC_BINDING_HANDLE SourceBinding,
+//                          RPC_BINDING_HANDLE* DestinationBinding)
+//{
+//	WLog_ERR(TAG, "Not implemented");
+//	return 0;
+//}
 
-RPC_STATUS RpcBindingFree(RPC_BINDING_HANDLE* Binding)
-{
-	WLog_ERR(TAG, "Not implemented");
-	return 0;
-}
+//RPC_STATUS RpcBindingFree(RPC_BINDING_HANDLE* Binding)
+//{
+//	WLog_ERR(TAG, "Not implemented");
+//	return 0;
+//}
 
 RPC_STATUS RpcBindingSetOption(RPC_BINDING_HANDLE hBinding,
                                unsigned long option, ULONG_PTR optionValue)

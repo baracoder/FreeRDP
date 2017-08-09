@@ -27,6 +27,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <Windows.h>
+
 #include <winpr/crypto.h>
 #include <winpr/crt.h>
 #include <winpr/file.h>
@@ -116,13 +118,13 @@ fail:
 static int certificate_data_match_legacy(rdpCertificateStore* certificate_store,
 					 rdpCertificateData* certificate_data)
 {
-	HANDLE fp;
+	HANDLE fp = NULL;
 	int match = 1;
 	char* data;
 	char* mdata;
 	char* pline;
 	char* hostname = NULL;
-	DWORD lowSize, highSize;
+	DWORD lowSize = 0 , highSize = 0;
 	UINT64 size;
 	size_t length;
 	DWORD read;
@@ -130,13 +132,13 @@ static int certificate_data_match_legacy(rdpCertificateStore* certificate_store,
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->legacy_file, strlen(certificate_store->legacy_file), PATH_STYLE_UNIX);
 	
-	fp = CreateFileA(certificate_store->legacy_file, GENERIC_READ, FILE_SHARE_READ,
+	fp = CreateFile2 (certificate_store->legacy_file, GENERIC_READ, FILE_SHARE_READ,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
 	if (fp == INVALID_HANDLE_VALUE)
 		return match;
 
-	if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+	//if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+	if (false)
 	{
 		WLog_ERR(TAG, "GetFileSize(%s) returned %s [0x%08"PRIX32"]",
 			 certificate_store->legacy_file, strerror(errno), GetLastError());
@@ -237,7 +239,7 @@ static int certificate_data_match_raw(rdpCertificateStore* certificate_store,
 							char** fprint)
 {
 	BOOL found = FALSE;
-	HANDLE fp;
+	HANDLE fp = NULL;
 	size_t length;
 	char* data;
 	char* mdata;
@@ -254,13 +256,14 @@ static int certificate_data_match_raw(rdpCertificateStore* certificate_store,
 
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFileA(certificate_store->file, GENERIC_READ, FILE_SHARE_READ,
+	fp = CreateFile2(certificate_store->file, GENERIC_READ, FILE_SHARE_READ,
 					NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)
 		return match;
 
-	if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+	//if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+	if (true)
 	{
 		WLog_ERR(TAG, "GetFileSize(%s) returned %s [0x%08"PRIX32"]",
 			 certificate_store->legacy_file, strerror(errno), GetLastError());
@@ -360,7 +363,7 @@ int certificate_data_match(rdpCertificateStore* certificate_store,
 BOOL certificate_data_replace(rdpCertificateStore* certificate_store,
 						rdpCertificateData* certificate_data)
 {
-	HANDLE fp;
+	HANDLE fp = NULL;
 	BOOL rc = FALSE;
 	size_t length;
 	char* data;
@@ -368,17 +371,18 @@ BOOL certificate_data_replace(rdpCertificateStore* certificate_store,
 	char* pline;
 	UINT64 size;
 	DWORD read, written;
-	DWORD lowSize, highSize;
+	DWORD lowSize = 0, highSize = 0;
 
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFileA(certificate_store->file, GENERIC_READ | GENERIC_WRITE, 0,
+	fp = CreateFile2(certificate_store->file, GENERIC_READ | GENERIC_WRITE, 0,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)
 		return FALSE;
 
-	if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+//	if ((lowSize = GetFileSize(fp, &highSize)) == INVALID_FILE_SIZE)
+	if (true)
 	{
 		WLog_ERR(TAG, "GetFileSize(%s) returned %s [0x%08"PRIX32"]",
 			 certificate_store->legacy_file, strerror(errno), GetLastError());
@@ -543,7 +547,7 @@ BOOL certificate_split_line(char* line, char** host, UINT16* port, char** subjec
 
 BOOL certificate_data_print(rdpCertificateStore* certificate_store, rdpCertificateData* certificate_data)
 {
-	HANDLE fp;
+	HANDLE fp = NULL;
 	char* tdata;
 	UINT64 size;
 	DWORD written;
@@ -551,7 +555,7 @@ BOOL certificate_data_print(rdpCertificateStore* certificate_store, rdpCertifica
 	/* reopen in append mode */
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFileA(certificate_store->file, GENERIC_WRITE, 0,
+	fp = CreateFile2(certificate_store->file, GENERIC_WRITE, 0,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)

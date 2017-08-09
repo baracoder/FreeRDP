@@ -164,9 +164,11 @@ static void _tsmf_stream_free(TSMF_STREAM* stream);
 
 static UINT64 get_current_time(void)
 {
-	struct timeval tp;
-	gettimeofday(&tp, 0);
-	return ((UINT64)tp.tv_sec) * 10000000LL + ((UINT64)tp.tv_usec) * 10LL;
+	//struct timeval tp;
+	//gettimeofday(&tp, 0);
+	// TODO clarify
+	return GetTickCount64() * 10L;
+	//return ((UINT64)tp.tv_sec) * 10000000LL + ((UINT64)tp.tv_usec) * 10LL;
 }
 
 static TSMF_SAMPLE* tsmf_stream_pop_sample(TSMF_STREAM* stream, int sync)
@@ -399,7 +401,7 @@ TSMF_PRESENTATION* tsmf_presentation_find_by_id(const BYTE* guid)
 	UINT32 count;
 	BOOL found = FALSE;
 	char guid_str[GUID_SIZE * 2 + 1];
-	TSMF_PRESENTATION* presentation;
+	TSMF_PRESENTATION* presentation = NULL;
 	ArrayList_Lock(presentation_list);
 	count = ArrayList_Count(presentation_list);
 
@@ -1313,7 +1315,7 @@ TSMF_STREAM* tsmf_stream_find_by_id(TSMF_PRESENTATION* presentation,
 	UINT32 index;
 	UINT32 count;
 	BOOL found = FALSE;
-	TSMF_STREAM* stream;
+	TSMF_STREAM* stream = NULL;
 	ArrayList_Lock(presentation->stream_list);
 	count = ArrayList_Count(presentation->stream_list);
 

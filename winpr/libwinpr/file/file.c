@@ -996,35 +996,35 @@ DWORD WINAPI GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh)
 	return fileSize.LowPart;
 }
 
-DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove,
-	PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod)
-{
-	BOOL status;
-	LARGE_INTEGER liDistanceToMove = { 0, 0 };
-	LARGE_INTEGER liNewFilePointer = { 0, 0 };
+//DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove,
+//	PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod)
+//{
+//	BOOL status;
+//	LARGE_INTEGER liDistanceToMove = { 0, 0 };
+//	LARGE_INTEGER liNewFilePointer = { 0, 0 };
+//
+//	liDistanceToMove.LowPart = lDistanceToMove;
+//
+//	status = SetFilePointerEx(hFile, liDistanceToMove, &liNewFilePointer, dwMoveMethod);
+//
+//	if (!status)
+//		return INVALID_SET_FILE_POINTER;
+//
+//	if (lpDistanceToMoveHigh)
+//		*lpDistanceToMoveHigh = liNewFilePointer.HighPart;
+//
+//	return liNewFilePointer.LowPart;
+//}
 
-	liDistanceToMove.LowPart = lDistanceToMove;
+//HANDLE FindFirstFileA(LPCSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData)
+//{
+//	return FindFirstFileExA(lpFileName, FindExInfoStandard, lpFindFileData, FindExSearchNameMatch, NULL, 0);
+//}
 
-	status = SetFilePointerEx(hFile, liDistanceToMove, &liNewFilePointer, dwMoveMethod);
-
-	if (!status)
-		return INVALID_SET_FILE_POINTER;
-
-	if (lpDistanceToMoveHigh)
-		*lpDistanceToMoveHigh = liNewFilePointer.HighPart;
-
-	return liNewFilePointer.LowPart;
-}
-
-HANDLE FindFirstFileA(LPCSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData)
-{
-	return FindFirstFileExA(lpFileName, FindExInfoStandard, lpFindFileData, FindExSearchNameMatch, NULL, 0);
-}
-
-HANDLE FindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW lpFindFileData)
-{
-	return FindFirstFileExW(lpFileName, FindExInfoStandard, lpFindFileData, FindExSearchNameMatch, NULL, 0);
-}
+//HANDLE FindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW lpFindFileData)
+//{
+//	return FindFirstFileExW(lpFileName, FindExInfoStandard, lpFindFileData, FindExSearchNameMatch, NULL, 0);
+//}
 
 DWORD GetFullPathNameA(LPCSTR lpFileName, DWORD nBufferLength, LPSTR lpBuffer, LPSTR* lpFilePart)
 {
@@ -1060,49 +1060,49 @@ DWORD GetFullPathNameA(LPCSTR lpFileName, DWORD nBufferLength, LPSTR lpBuffer, L
 	return dwStatus * 2;
 }
 
-BOOL GetDiskFreeSpaceA(LPCSTR lpRootPathName, LPDWORD lpSectorsPerCluster,
-	LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters)
-{
-	BOOL status;
-	ULARGE_INTEGER FreeBytesAvailableToCaller = { 0, 0 };
-	ULARGE_INTEGER TotalNumberOfBytes = { 0, 0 };
-	ULARGE_INTEGER TotalNumberOfFreeBytes = { 0, 0 };
+//BOOL GetDiskFreeSpaceA(LPCSTR lpRootPathName, LPDWORD lpSectorsPerCluster,
+//	LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters)
+//{
+//	BOOL status;
+//	ULARGE_INTEGER FreeBytesAvailableToCaller = { 0, 0 };
+//	ULARGE_INTEGER TotalNumberOfBytes = { 0, 0 };
+//	ULARGE_INTEGER TotalNumberOfFreeBytes = { 0, 0 };
+//
+//	status = GetDiskFreeSpaceExA(lpRootPathName, &FreeBytesAvailableToCaller,
+//			&TotalNumberOfBytes, &TotalNumberOfFreeBytes);
+//
+//	if (!status)
+//		return FALSE;
+//
+//	*lpBytesPerSector = 1;
+//	*lpSectorsPerCluster = TotalNumberOfBytes.LowPart;
+//	*lpNumberOfFreeClusters = FreeBytesAvailableToCaller.LowPart;
+//	*lpTotalNumberOfClusters = TotalNumberOfFreeBytes.LowPart;
+//
+//	return TRUE;
+//}
 
-	status = GetDiskFreeSpaceExA(lpRootPathName, &FreeBytesAvailableToCaller,
-			&TotalNumberOfBytes, &TotalNumberOfFreeBytes);
-
-	if (!status)
-		return FALSE;
-
-	*lpBytesPerSector = 1;
-	*lpSectorsPerCluster = TotalNumberOfBytes.LowPart;
-	*lpNumberOfFreeClusters = FreeBytesAvailableToCaller.LowPart;
-	*lpTotalNumberOfClusters = TotalNumberOfFreeBytes.LowPart;
-
-	return TRUE;
-}
-
-BOOL GetDiskFreeSpaceW(LPCWSTR lpRootPathName, LPDWORD lpSectorsPerCluster,
-	LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters)
-{
-	BOOL status;
-	ULARGE_INTEGER FreeBytesAvailableToCaller = { 0, 0 };
-	ULARGE_INTEGER TotalNumberOfBytes = { 0, 0 };
-	ULARGE_INTEGER TotalNumberOfFreeBytes = { 0, 0 };
-
-	status = GetDiskFreeSpaceExW(lpRootPathName, &FreeBytesAvailableToCaller,
-		&TotalNumberOfBytes, &TotalNumberOfFreeBytes);
-
-	if (!status)
-		return FALSE;
-
-	*lpBytesPerSector = 1;
-	*lpSectorsPerCluster = TotalNumberOfBytes.LowPart;
-	*lpNumberOfFreeClusters = FreeBytesAvailableToCaller.LowPart;
-	*lpTotalNumberOfClusters = TotalNumberOfFreeBytes.LowPart;
-
-	return TRUE;
-}
+//BOOL GetDiskFreeSpaceW(LPCWSTR lpRootPathName, LPDWORD lpSectorsPerCluster,
+//	LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters)
+//{
+//	BOOL status;
+//	ULARGE_INTEGER FreeBytesAvailableToCaller = { 0, 0 };
+//	ULARGE_INTEGER TotalNumberOfBytes = { 0, 0 };
+//	ULARGE_INTEGER TotalNumberOfFreeBytes = { 0, 0 };
+//
+//	status = GetDiskFreeSpaceExW(lpRootPathName, &FreeBytesAvailableToCaller,
+//		&TotalNumberOfBytes, &TotalNumberOfFreeBytes);
+//
+//	if (!status)
+//		return FALSE;
+//
+//	*lpBytesPerSector = 1;
+//	*lpSectorsPerCluster = TotalNumberOfBytes.LowPart;
+//	*lpNumberOfFreeClusters = FreeBytesAvailableToCaller.LowPart;
+//	*lpTotalNumberOfClusters = TotalNumberOfFreeBytes.LowPart;
+//
+//	return TRUE;
+//}
 
 DWORD GetLogicalDriveStringsA(DWORD nBufferLength, LPSTR lpBuffer)
 {
@@ -1116,15 +1116,15 @@ DWORD GetLogicalDriveStringsW(DWORD nBufferLength, LPWSTR lpBuffer)
 	return 0;
 }
 
-BOOL PathIsDirectoryEmptyA(LPCSTR pszPath)
-{
-	return FALSE;
-}
-
-UINT GetACP(void)
-{
-	return CP_UTF8;
-}
+//BOOL PathIsDirectoryEmptyA(LPCSTR pszPath)
+//{
+//	return FALSE;
+//}
+//
+//UINT GetACP(void)
+//{
+//	return CP_UTF8;
+//}
 
 #endif
 

@@ -111,16 +111,16 @@ typedef HANDLE* PHKEY;
 
 typedef ACCESS_MASK REGSAM;
 
-#define HKEY_CLASSES_ROOT				((HKEY) (LONG_PTR) (LONG) 0x80000000)
-#define HKEY_CURRENT_USER				((HKEY) (LONG_PTR) (LONG) 0x80000001)
-#define HKEY_LOCAL_MACHINE				((HKEY) (LONG_PTR) (LONG) 0x80000002)
-#define HKEY_USERS					((HKEY) (LONG_PTR) (LONG) 0x80000003)
-#define HKEY_PERFORMANCE_DATA				((HKEY) (LONG_PTR) (LONG) 0x80000004)
-#define HKEY_PERFORMANCE_TEXT				((HKEY) (LONG_PTR) (LONG) 0x80000050)
-#define HKEY_PERFORMANCE_NLSTEXT			((HKEY) (LONG_PTR) (LONG) 0x80000060)
-#define HKEY_CURRENT_CONFIG				((HKEY) (LONG_PTR) (LONG) 0x80000005)
-#define HKEY_DYN_DATA					((HKEY) (LONG_PTR) (LONG) 0x80000006)
-#define HKEY_CURRENT_USER_LOCAL_SETTINGS		((HKEY) (LONG_PTR) (LONG) 0x80000007)
+//#define HKEY_CLASSES_ROOT				((HKEY) (LONG_PTR) (LONG) 0x80000000)
+//#define HKEY_CURRENT_USER				((HKEY) (LONG_PTR) (LONG) 0x80000001)
+//#define HKEY_LOCAL_MACHINE				((HKEY) (LONG_PTR) (LONG) 0x80000002)
+//#define HKEY_USERS					((HKEY) (LONG_PTR) (LONG) 0x80000003)
+//#define HKEY_PERFORMANCE_DATA				((HKEY) (LONG_PTR) (LONG) 0x80000004)
+//#define HKEY_PERFORMANCE_TEXT				((HKEY) (LONG_PTR) (LONG) 0x80000050)
+//#define HKEY_PERFORMANCE_NLSTEXT			((HKEY) (LONG_PTR) (LONG) 0x80000060)
+//#define HKEY_CURRENT_CONFIG				((HKEY) (LONG_PTR) (LONG) 0x80000005)
+//#define HKEY_DYN_DATA					((HKEY) (LONG_PTR) (LONG) 0x80000006)
+//#define HKEY_CURRENT_USER_LOCAL_SETTINGS		((HKEY) (LONG_PTR) (LONG) 0x80000007)
 
 #define RRF_RT_REG_NONE					0x00000001
 #define RRF_RT_REG_SZ					0x00000002
@@ -130,37 +130,37 @@ typedef ACCESS_MASK REGSAM;
 #define RRF_RT_REG_MULTI_SZ				0x00000020
 #define RRF_RT_REG_QWORD				0x00000040
 
-#define RRF_RT_DWORD					(RRF_RT_REG_BINARY | RRF_RT_REG_DWORD)
-#define RRF_RT_QWORD					(RRF_RT_REG_BINARY | RRF_RT_REG_QWORD)
-#define RRF_RT_ANY					0x0000FFFF
+//#define RRF_RT_DWORD					(RRF_RT_REG_BINARY | RRF_RT_REG_DWORD)
+//#define RRF_RT_QWORD					(RRF_RT_REG_BINARY | RRF_RT_REG_QWORD)
+//#define RRF_RT_ANY					0x0000FFFF
 
 #define RRF_NOEXPAND					0x10000000
 #define RRF_ZEROONFAILURE				0x20000000
 
-struct val_context
-{
-	int valuelen;
-	LPVOID value_context;
-	LPVOID val_buff_ptr;
-};
+//struct val_context
+//{
+//	int valuelen;
+//	LPVOID value_context;
+//	LPVOID val_buff_ptr;
+//};
 
 typedef struct val_context *PVALCONTEXT;
 
-typedef struct pvalueA
-{
-	LPSTR pv_valuename;
-	int pv_valuelen;
-	LPVOID pv_value_context;
-	DWORD pv_type;
-} PVALUEA, *PPVALUEA;
+//typedef struct pvalueA
+//{
+//	LPSTR pv_valuename;
+//	int pv_valuelen;
+//	LPVOID pv_value_context;
+//	DWORD pv_type;
+//} PVALUEA, *PPVALUEA;
 
-typedef struct pvalueW
-{
-	LPWSTR pv_valuename;
-	int pv_valuelen;
-	LPVOID pv_value_context;
-	DWORD pv_type;
-} PVALUEW, *PPVALUEW;
+//typedef struct pvalueW
+//{
+//	LPWSTR pv_valuename;
+//	int pv_valuelen;
+//	LPVOID pv_value_context;
+//	DWORD pv_type;
+//} PVALUEW, *PPVALUEW;
 
 #ifdef UNICODE
 typedef PVALUEW PVALUE;
@@ -170,21 +170,21 @@ typedef PVALUEA PVALUE;
 typedef PPVALUEA PPVALUE;
 #endif
 
-typedef struct value_entA
-{
-	LPSTR ve_valuename;
-	DWORD ve_valuelen;
-	DWORD_PTR ve_valueptr;
-	DWORD ve_type;
-} VALENTA, *PVALENTA;
+//typedef struct value_entA
+//{
+//	LPSTR ve_valuename;
+//	DWORD ve_valuelen;
+//	DWORD_PTR ve_valueptr;
+//	DWORD ve_type;
+//} VALENTA, *PVALENTA;
 
-typedef struct value_entW
-{
-	LPWSTR ve_valuename;
-	DWORD ve_valuelen;
-	DWORD_PTR ve_valueptr;
-	DWORD ve_type;
-} VALENTW, *PVALENTW;
+//typedef struct value_entW
+//{
+//	LPWSTR ve_valuename;
+//	DWORD ve_valuelen;
+//	DWORD_PTR ve_valueptr;
+//	DWORD ve_type;
+//} VALENTW, *PVALENTW;
 
 #ifdef UNICODE
 typedef VALENTW VALENT;

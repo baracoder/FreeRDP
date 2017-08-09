@@ -454,9 +454,11 @@ SecurityFunctionTableA* SEC_ENTRY InitSecurityInterfaceExA(DWORD flags)
 
 /* Package Management */
 
-SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesW(ULONG* pcPackages,
-        PSecPkgInfoW* ppPackageInfo)
+SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesW(void* vp1,
+        void* vp2)
 {
+	ULONG* pcPackages = vp1;
+	PSecPkgInfoW* ppPackageInfo = vp2;
 	SECURITY_STATUS status;
 	InitOnceExecuteOnce(&g_Initialized, InitializeSspiModuleInt, NULL, NULL);
 
@@ -469,9 +471,11 @@ SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesW(ULONG* pcPackages,
 	return status;
 }
 
-SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesA(ULONG* pcPackages,
-        PSecPkgInfoA* ppPackageInfo)
+SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesA(void* vp1,
+	void* vp2)
 {
+	ULONG* pcPackages = vp1;
+	PSecPkgInfoW* ppPackageInfo = vp2;
 	SECURITY_STATUS status;
 	InitOnceExecuteOnce(&g_Initialized, InitializeSspiModuleInt, NULL, NULL);
 

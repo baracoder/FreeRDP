@@ -1566,6 +1566,7 @@ BIO_METHOD* BIO_s_rdg(void)
 	return bio_methods;
 }
 
+
 rdpRdg* rdg_new(rdpTransport* transport)
 {
 	rdpRdg* rdg;
@@ -1591,7 +1592,7 @@ rdpRdg* rdg_new(rdpTransport* transport)
 			goto rdg_alloc_error;
 
 		sprintf_s(bracedUuid, sizeof(bracedUuid), "{%s}", stringUuid);
-		RpcStringFreeA(&stringUuid);
+		//RpcStringFree (&stringUuid);
 
 		rdg->tlsOut = tls_new(rdg->settings);
 

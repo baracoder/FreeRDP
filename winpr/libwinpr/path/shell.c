@@ -36,6 +36,8 @@
 
 #include <winpr/path.h>
 
+#include <ShlObj.h>
+
 #if defined(__IOS__)
 #include "shell_ios.h"
 #endif
@@ -85,8 +87,14 @@ static char* GetEnvAlloc(LPCSTR lpName)
 
 static char* GetPath_HOME(void)
 {
+	char defPath[] = "";
 	char* path = NULL;
-#ifdef _WIN32
+#ifdef _UWP		
+	path = malloc(100);
+	memcpy(path, defPath, sizeof(defPath));
+	GetTempPathW(100, path);
+	//SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_DEFAULT, NULL, path);
+#elif defined(_WIN32)
 	path = GetEnvAlloc("UserProfile");
 #elif defined(__IOS__)
 	path = ios_get_home();
@@ -309,6 +317,17 @@ char* GetPath_XDG_RUNTIME_DIR(void)
 char* GetKnownPath(int id)
 {
 	char* path = NULL;
+#ifdef _UWP
+	char defPath[] = ".";
+	path = malloc(200);
+	memcpy(path, defPath, sizeof(defPath));
+	GetTempPathW(200, path);
+	char* pathA = malloc(200);
+
+	WideCharToMultiByte(CP_ACP, 0, path, 200, pathA, 200, NULL, NULL);
+
+	return pathA;
+#endif // _UWP
 
 	switch (id)
 	{
@@ -459,10 +478,8 @@ char* GetCombinedPath(const char* basePath, const char* subPath)
 
 BOOL PathMakePathA(LPCSTR path, LPSECURITY_ATTRIBUTES lpAttributes)
 {
-#if defined(_UWP)
-	return FALSE;
-#elif defined(_WIN32)
-	return (SHCreateDirectoryExA(NULL, path, lpAttributes) == ERROR_SUCCESS);
+#if defined(_WIN32)
+	return (CreateDirectoryA(path, lpAttributes) != 0);
 #else
 	const char delim = PathGetSeparatorA(PATH_STYLE_NATIVE);
 	char* dup;
@@ -519,40 +536,40 @@ BOOL PathFileExistsW(LPCWSTR pszPath)
 	return ret;
 }
 
-BOOL PathIsDirectoryEmptyA(LPCSTR pszPath)
-{
-	struct dirent *dp;
-	int empty = 1;
+//BOOL PathIsDirectoryEmptyA(LPCSTR pszPath)
+//{
+//	//struct dirent *dp;
+//	int empty = 1;
+//
+//	//DIR *dir = opendir(pszPath);
+//	//if (dir == NULL) /* Not a directory or doesn't exist */
+//	//	return 1;
+//
+//	//while ((dp = readdir(dir)) != NULL) {
+//	//	if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+//	//		continue;    /* Skip . and .. */
+//
+//	//	empty = 0;
+//	//	break;
+//	//}
+//	//closedir(dir);
+//	return empty;
+//}
 
-	DIR *dir = opendir(pszPath);
-	if (dir == NULL) /* Not a directory or doesn't exist */
-		return 1;
 
-	while ((dp = readdir(dir)) != NULL) {
-		if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-			continue;    /* Skip . and .. */
-
-		empty = 0;
-		break;
-	}
-	closedir(dir);
-	return empty;
-}
-
-
-BOOL PathIsDirectoryEmptyW(LPCWSTR pszPath)
-{
-	LPSTR lpFileNameA = NULL;
-	BOOL ret;
-
-	if (ConvertFromUnicode(CP_UTF8, 0, pszPath, -1, &lpFileNameA, 0, NULL, NULL) < 1)
-		return FALSE;
-
-	ret = PathIsDirectoryEmptyA(lpFileNameA);
-	free (lpFileNameA);
-
-	return ret;
-}
+//BOOL PathIsDirectoryEmptyW(LPCWSTR pszPath)
+//{
+//	LPSTR lpFileNameA = NULL;
+//	BOOL ret;
+//
+//	if (ConvertFromUnicode(CP_UTF8, 0, pszPath, -1, &lpFileNameA, 0, NULL, NULL) < 1)
+//		return FALSE;
+//
+//	ret = PathIsDirectoryEmptyA(lpFileNameA);
+//	free (lpFileNameA);
+//
+//	return ret;
+//}
 
 
 #else

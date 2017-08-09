@@ -414,7 +414,7 @@ WINPR_API BOOL ValidFileNameComponent(LPCWSTR lpFileName);
 
 #endif /* _WIN32 */
 
-#ifdef _UWP
+#ifdef _UWP2
 
 #ifdef __cplusplus
 extern "C" {

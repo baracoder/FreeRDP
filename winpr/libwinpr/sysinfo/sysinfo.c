@@ -24,6 +24,7 @@
 
 #include <winpr/sysinfo.h>
 #include <winpr/platform.h>
+#include <winpr/string.h>
 
 #if defined(ANDROID)
 #include "cpufeatures/cpu-features.h"
@@ -510,10 +511,10 @@ BOOL GetComputerNameExW(COMPUTER_NAME_FORMAT NameType, LPWSTR lpBuffer, LPDWORD 
 
 #if defined(_UWP)
 
-DWORD GetTickCount(void)
-{
-	return (DWORD) GetTickCount64();
-}
+//DWORD GetTickCount(void)
+//{
+//	return (DWORD) GetTickCount64();
+//}
 
 #endif
 
