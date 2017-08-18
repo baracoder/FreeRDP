@@ -47,7 +47,7 @@ struct dc_context
 typedef struct dc_context dcContext;
 
 dumbconfig dc;
-freerdp* instance;
+freerdp* instance = NULL;
 
 
 
@@ -213,7 +213,7 @@ static BOOL dc_pre_connect(freerdp* instance)
 
 static BOOL dc_post_connect(freerdp* instance)
 {
-	OutputDebugString("dc_post_connect\n");
+	OutputDebugString(L"dc_post_connect\n");
 
 	if (!gdi_init(instance, PIXEL_FORMAT_BGRA32))
 		return FALSE;
@@ -225,7 +225,7 @@ static BOOL dc_post_connect(freerdp* instance)
 
 static void* dc_client_thread_proc(freerdp* instance)
 {
-	OutputDebugString("dc_client_thread_proc\n");
+	OutputDebugString(L"dc_client_thread_proc\n");
 
 	DWORD nCount;
 	DWORD status;
@@ -282,7 +282,7 @@ const char* defaultArgv[] = {
 
 
 dumbconfig* dumb_config_new(void) {
-	OutputDebugString("dumb_config_new\n");
+	OutputDebugString(L"dumb_config_new\n");
 	dumbconfig* p = malloc(sizeof(dumbconfig));
 	ZeroMemory(p, sizeof(dumbconfig));
 	p->drawFinish = NULL;
@@ -458,15 +458,15 @@ static int wlfreerdp_run(freerdp* instance) // new one
 	HANDLE handles[64];
 	DWORD status;
 
-	OutputDebugString("freerdp_connect\n");
+	OutputDebugString(L"freerdp_connect\n");
 
 	if (!freerdp_connect(instance))
 	{
-		OutputDebugString("Failed to connect\n");
+		OutputDebugString(L"Failed to connect\n");
 		return -1;
 	
 	}
-	OutputDebugString("freerdp_connect-\n");
+	OutputDebugString(L"freerdp_connect-\n");
 
 
 
@@ -479,14 +479,14 @@ static int wlfreerdp_run(freerdp* instance) // new one
 		count = freerdp_get_event_handles(instance->context, &handles[0], 64);
 		if (!count)
 		{
-			OutputDebugString("Failed to get FreeRDP file descriptor\n");
+			OutputDebugString(L"Failed to get FreeRDP file descriptor\n");
 			break;
 		}
 
 		status = WaitForMultipleObjects(count, handles, FALSE, INFINITE);
 		if (WAIT_FAILED == status)
 		{
-			OutputDebugString("%s: WaitForMultipleObjects failed\n", __FUNCTION__);
+			OutputDebugString(L"%s: WaitForMultipleObjects failed\n", __FUNCTION__);
 			break;
 		}
 
@@ -630,9 +630,12 @@ static BOOL wl_pre_connect(freerdp* instance)
 	return TRUE;
 }
 
-static BOOL wl_post_connect(freerdp* instance)
+static BOOL wl_post_connect(freerdp* instanceLocal)
 {
 	OutputDebugString(L"wl_post_connect\n");
+
+	instance = instanceLocal;
+
 
 	rdpGdi* gdi;
 	//UwacWindow* window;
@@ -642,6 +645,8 @@ static BOOL wl_post_connect(freerdp* instance)
 		return FALSE;
 
 	gdi = instance->context->gdi;
+
+	// Set instance
 
 	if (!gdi)
 		return FALSE;
@@ -986,7 +991,6 @@ int dumb_start(dumbconfig* pConfig)
 
 
 	OutputDebugString(L"run...");
-
 	rc = wlfreerdp_run(context->instance);
 	OutputDebugString(L"run... done!");
 
@@ -1005,6 +1009,8 @@ void dumb_key_event(int pressed, int scancode) {
 }
 
 void dumb_mouse_buttons_event(int pressed, enum DumbMouseButtons btn, int x, int y) {
+	if (!instance) return;
+
 	UINT16 flags;
 	if (pressed) {
 		flags = PTR_FLAGS_DOWN;
