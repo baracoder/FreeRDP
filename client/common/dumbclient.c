@@ -162,10 +162,13 @@ static BOOL dc_end_paint(dcContext* context)
 
 	INT32 x, y;
 	UINT32 w, h;
+	UINT32 gdiW, gdiH;
 	x = gdi->primary->hdc->hwnd->invalid->x;
 	y = gdi->primary->hdc->hwnd->invalid->y;
 	w = gdi->primary->hdc->hwnd->invalid->w;
 	h = gdi->primary->hdc->hwnd->invalid->h;
+	gdiW = gdi->width;
+	gdiH = gdi->height;
 	byte* data = gdi->primary_buffer;
 
 	if (gdi->primary->hdc->hwnd->invalid->null)
@@ -174,7 +177,7 @@ static BOOL dc_end_paint(dcContext* context)
 	if (dc.drawFinish != NULL) {
 		OutputDebugString("dc_end_paint call drawFinish\n");
 
-		dc.drawFinish(data, x, y, w, h);
+		dc.drawFinish(data, x, y, w, h, gdiW, gdiH);
 	}
 
 	return TRUE;
@@ -343,7 +346,7 @@ static BOOL wl_end_paint(rdpContext* context)
 
 	// gdi->primary_buffer
 	if (dc.drawFinish != NULL)
-		dc.drawFinish(gdi->primary_buffer, x, y, w, h);
+		dc.drawFinish(gdi->primary_buffer, x, y, w, h, gdi->width, gdi->height);
 
 
 	return TRUE;
@@ -1011,26 +1014,51 @@ void dumb_key_event(int pressed, int scancode) {
 void dumb_mouse_buttons_event(int pressed, enum DumbMouseButtons btn, int x, int y) {
 	if (!instance) return;
 
-	UINT16 flags;
-	if (pressed) {
-		flags = PTR_FLAGS_DOWN;
-	}
-	else {
-		flags = 0;
-	}
+	UINT16 flags = 0;
+	BOOL extended = FALSE;
+	
 	switch (btn) {
-	case LEFT:
+	case 0:
 		flags |= PTR_FLAGS_BUTTON1;
+		if (pressed)  flags |= PTR_FLAGS_DOWN;
 		break;
-	case RIGHT:
+	case 1:
 		flags |= PTR_FLAGS_BUTTON2;
+		if (pressed)  flags |= PTR_FLAGS_DOWN;
 		break;
-	case MIDDLE:
+	case 2:
 		flags |= PTR_FLAGS_BUTTON3;
+		if (pressed)  flags |= PTR_FLAGS_DOWN;
 		break;
+	case 3:
+		flags |= PTR_FLAGS_WHEEL | 0x0078;
+		break;
+	case 4:
+		flags |= PTR_FLAGS_WHEEL | PTR_FLAGS_WHEEL_NEGATIVE | 0x0088;
+		break;
+	case 5:
+		flags |= PTR_XFLAGS_BUTTON1;
+		if (pressed)  flags |= PTR_XFLAGS_DOWN;
+		extended = TRUE;
+		break;
+	case 6:
+		flags |= PTR_XFLAGS_BUTTON2;
+		if (pressed)  flags |= PTR_XFLAGS_DOWN;
+		extended = TRUE;
+		break;
+	default:
+		OutputDebugString(L"unknown mouse button %d", btn);
+		return;
 	}
-	if (instance)
-		instance->context->input->MouseEvent(instance->context->input, flags, x, y);
+	if (instance && flags) {
+		if (extended == TRUE) {
+			instance->context->input->ExtendedMouseEvent(instance->context->input, flags, x, y);
+		}
+		else {
+			instance->context->input->MouseEvent(instance->context->input, flags, x, y);
+		}
+
+	}
 }
 
 void dumb_mouse_move_event(int x, int y) {

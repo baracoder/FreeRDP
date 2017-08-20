@@ -5,7 +5,7 @@
 //#define FREERDP_API __declspec(dllimport)
 #endif
 
-typedef int(*draw_finish)(unsigned char* gdi_bitmap, int x, int y, int width, int height);
+typedef int(*draw_finish)(unsigned char* gdi_bitmap, int x, int y, int width, int height, int gdiW, int gdiH);
 typedef struct dumbconfig {
 	draw_finish drawFinish;
 	char** argv;
