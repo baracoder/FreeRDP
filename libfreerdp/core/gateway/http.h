@@ -20,9 +20,6 @@
 #ifndef FREERDP_CORE_HTTP_H
 #define FREERDP_CORE_HTTP_H
 
-typedef struct _http_context HttpContext;
-typedef struct _http_request HttpRequest;
-typedef struct _http_response HttpResponse;
 
 #include <freerdp/types.h>
 #include <freerdp/crypto/tls.h>
@@ -43,6 +40,12 @@ struct _http_context
 	char* Pragma;
 	char* RdgConnectionId;
 };
+
+typedef struct _http_context HttpContext;
+typedef struct _http_request HttpRequest;
+typedef struct _http_response HttpResponse;
+
+
 
 FREERDP_LOCAL BOOL http_context_set_method(HttpContext* context,
         const char* Method);
@@ -112,7 +115,7 @@ struct _http_response
 
 FREERDP_LOCAL void http_response_print(HttpResponse* response);
 
-FREERDP_LOCAL HttpResponse* http_response_recv(rdpTls* tls);
+FREERDP_LOCAL HttpResponse*  http_response_recv(rdpTls* tls);
 
 FREERDP_LOCAL HttpResponse* http_response_new(void);
 FREERDP_LOCAL void http_response_free(HttpResponse* response);

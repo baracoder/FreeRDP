@@ -585,6 +585,7 @@ struct rpc_client_call
 };
 typedef struct rpc_client_call RpcClientCall;
 
+
 #define RPC_CHANNEL_COMMON() \
 	rdpRpc* rpc; \
 	BIO* bio; \

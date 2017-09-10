@@ -63,7 +63,6 @@
 #define TLS_ALERT_DESCRIPTION_NO_RENEGOTIATION		100
 #define TLS_ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION	110
 
-typedef struct rdp_tls rdpTls;
 
 struct rdp_tls
 {
@@ -83,6 +82,9 @@ struct rdp_tls
 	int alertDescription;
 	BOOL isGatewayTransport;
 };
+
+typedef struct rdp_tls rdpTls;
+
 
 #ifdef __cplusplus
  extern "C" {

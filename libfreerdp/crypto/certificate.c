@@ -132,7 +132,7 @@ static int certificate_data_match_legacy(rdpCertificateStore* certificate_store,
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->legacy_file, strlen(certificate_store->legacy_file), PATH_STYLE_UNIX);
 	
-	fp = CreateFile2 (certificate_store->legacy_file, GENERIC_READ, FILE_SHARE_READ,
+	fp = CreateFile (certificate_store->legacy_file, GENERIC_READ, FILE_SHARE_READ,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (fp == INVALID_HANDLE_VALUE)
 		return match;
@@ -256,7 +256,7 @@ static int certificate_data_match_raw(rdpCertificateStore* certificate_store,
 
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFile2(certificate_store->file, GENERIC_READ, FILE_SHARE_READ,
+	fp = CreateFile(certificate_store->file, GENERIC_READ, FILE_SHARE_READ,
 					NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)
@@ -375,7 +375,7 @@ BOOL certificate_data_replace(rdpCertificateStore* certificate_store,
 
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFile2(certificate_store->file, GENERIC_READ | GENERIC_WRITE, 0,
+	fp = CreateFile(certificate_store->file, GENERIC_READ | GENERIC_WRITE, 0,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)
@@ -555,7 +555,7 @@ BOOL certificate_data_print(rdpCertificateStore* certificate_store, rdpCertifica
 	/* reopen in append mode */
 	/* Assure POSIX style paths, CreateFile expects either '/' or '\\' */
 	PathCchConvertStyleA(certificate_store->file, strlen(certificate_store->file), PATH_STYLE_UNIX);
-	fp = CreateFile2(certificate_store->file, GENERIC_WRITE, 0,
+	fp = CreateFile(certificate_store->file, GENERIC_WRITE, 0,
 					NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (fp == INVALID_HANDLE_VALUE)

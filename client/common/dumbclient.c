@@ -14,7 +14,7 @@ most parts are taken from the wayland client, some from x11 client
 #include <freerdp/gdi/gdi.h>
 #include <freerdp/gdi/gfx.h>
 #include <freerdp/client.h>
-#include <libfreerdp/core/client.h>
+//#include <libfreerdp/core/client.h>
 #include <freerdp/client/file.h>
 #include <freerdp/client/cmdline.h>
 #include <freerdp/client/cliprdr.h>
@@ -147,7 +147,9 @@ const char* defaultArgv[] = {
 	"/p:Test123",
 	"/gdi:sw",
 	"/gfx:AVC444",
-	"/cert-ignore"
+	"/cert-ignore",
+	"/app:C:\\windows\explorer.exe",
+	"/size:1024x768"
 };
 
 
@@ -451,7 +453,7 @@ static int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints)
 WSADATA wsaData;
 
 void dumb_init_winsocks() {
-	OutputDebugString(L"initialize winsocks");
+	OutputDebugString(L"initialize winsocks\n");
 
 	int iResult;
 
@@ -462,7 +464,7 @@ void dumb_init_winsocks() {
 }
 
 void* dumb_prepare(dumbconfig* pConfig) {
-
+	dumb_init_winsocks();
 	OutputDebugString(L"assign argc, argv\n");
 	int argc = pConfig->argc;
 	char** argv = pConfig->argv;
@@ -504,16 +506,19 @@ int dumb_start(void* cPtr)
 
 	int rc = -1;
 
-	if (freerdp_client_start(context) != 0)
+	rc = freerdp_client_start(context);
+	if (rc != 0)
 		goto fail;
 
 
 	OutputDebugString(L"run...");
 	rc = wlfreerdp_run(context->instance);
+	if (rc != 0)
+		goto fail;
 	OutputDebugString(L"run... done!");
 
 	if (freerdp_client_stop(context) != 0)
-		rc = -1;
+		rc -= -23;
 
 fail:
 	freerdp_client_context_free(context);
@@ -699,7 +704,8 @@ static BOOL xf_rail_window_common(rdpContext* context,
 	if (fieldFlags & WINDOW_ORDER_FIELD_SHOW)
 	{
 		//appWindow->showState = windowState->showState;
-		// TODO do something about minimized windows
+		if(!windowState->showState)
+			dc_rail_send_activate(context, windowId, TRUE);
 	}
 
 	if (fieldFlags & WINDOW_ORDER_FIELD_TITLE)

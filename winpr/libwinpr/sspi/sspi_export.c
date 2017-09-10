@@ -20,14 +20,18 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+//
+//#ifdef _WIN32
+//#define SEC_ENTRY __cdecl
+//#define SSPI_EXPORT	__declspec(dllexport)
+//#else
+//#define SEC_ENTRY
+//#define SSPI_EXPORT
+//#endif
 
-#ifdef _WIN32
-#define SEC_ENTRY __cdecl
-#define SSPI_EXPORT	__declspec(dllexport)
-#else
-#define SEC_ENTRY
-#define SSPI_EXPORT
-#endif
+#define SECURITY_WIN32
+#include <Windows.h>
+#include <Sspi.h>
 
 typedef long LONG;
 typedef unsigned long ULONG;
@@ -39,14 +43,16 @@ typedef LONG SECURITY_STATUS;
 
 /* Package Management */
 
-extern SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesW(void*, void*);
+#if false
+
+//extern SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesW(void*, void*);
 
 SSPI_EXPORT SECURITY_STATUS SEC_ENTRY EnumerateSecurityPackagesW(void* pcPackages, void* ppPackageInfo)
 {
 	return sspi_EnumerateSecurityPackagesW(pcPackages, ppPackageInfo);
 }
 
-extern SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesA(void*, void*);
+//extern SECURITY_STATUS SEC_ENTRY sspi_EnumerateSecurityPackagesA(void*, void*);
 
 SSPI_EXPORT SECURITY_STATUS SEC_ENTRY EnumerateSecurityPackagesA(void* pcPackages, void* ppPackageInfo)
 {
@@ -67,14 +73,14 @@ SSPI_EXPORT void* SEC_ENTRY InitSecurityInterfaceA(void)
 	return sspi_InitSecurityInterfaceA();
 }
 
-extern SECURITY_STATUS SEC_ENTRY sspi_QuerySecurityPackageInfoW(void*, void*);
+//extern SECURITY_STATUS SEC_ENTRY sspi_QuerySecurityPackageInfoW(void*, void*);
 
 SSPI_EXPORT SECURITY_STATUS SEC_ENTRY QuerySecurityPackageInfoW(void* pszPackageName, void* ppPackageInfo)
 {
 	return sspi_QuerySecurityPackageInfoW(pszPackageName, ppPackageInfo);
 }
 
-extern SECURITY_STATUS SEC_ENTRY sspi_QuerySecurityPackageInfoA(void*, void*);
+//extern SECURITY_STATUS SEC_ENTRY sspi_QuerySecurityPackageInfoA(void*, void*);
 
 SSPI_EXPORT SECURITY_STATUS SEC_ENTRY QuerySecurityPackageInfoA(void* pszPackageName, void* ppPackageInfo)
 {
@@ -83,7 +89,7 @@ SSPI_EXPORT SECURITY_STATUS SEC_ENTRY QuerySecurityPackageInfoA(void* pszPackage
 
 /* Credential Management */
 
-extern SECURITY_STATUS SEC_ENTRY sspi_AcquireCredentialsHandleW(void*, void*, ULONG, void*, void*, void*, void*, void*, void*);
+//extern SECURITY_STATUS SEC_ENTRY sspi_AcquireCredentialsHandleW(void*, void*, ULONG, void*, void*, void*, void*, void*, void*);
 
 SSPI_EXPORT SECURITY_STATUS SEC_ENTRY AcquireCredentialsHandleW(void* pszPrincipal, void* pszPackage,
 		ULONG fCredentialUse, void* pvLogonID, void* pAuthData, void* pGetKeyFn,
@@ -287,3 +293,5 @@ SSPI_EXPORT SECURITY_STATUS SEC_ENTRY VerifySignature(void* phContext, void* pMe
 {
 	return sspi_VerifySignature(phContext, pMessage, MessageSeqNo, pfQOP);
 }
+
+#endif
